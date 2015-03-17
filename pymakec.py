@@ -7,8 +7,11 @@ import itertools
 pjoin = os.path.join
 
 
+__version__ = '0.0.1'
+
+
 # standard cflags
-cflags = ['-g', 'O2', 'Wall', 'Wextra', 'Isrc', 'rdynamic', 'DNDEBUG']
+cflags = ['g', 'O2', 'Wall', 'Wextra', 'Isrc', 'rdynamic', 'DNDEBUG']
 
 # standard compiler name
 cc = 'cc'
@@ -89,7 +92,8 @@ def compile(sourcefiles, testfiles=None, outputs=None, cleanfiles=None):
     str_sources = ' '.join(itertools.chain(sourcefiles, testfiles))
     str_outputs = ' '.join(outputs)
     call = "{cc} {cflags} {sources} -o {outputs}".format(
-        cc=cc, cflags=cflags, sources=str_sources, outputs=str_outputs)
+        cc=cc, cflags=' '.join('-{}'.format(cf) for cf in cflags),
+        sources=str_sources, outputs=str_outputs)
     if cleanfiles:
         clean(cleanfiles)
     subprocess.check_call(call, shell=True)
